@@ -1,10 +1,17 @@
 import { Component } from "react";
+import {
+  FeedbackOptions,
+  Statistics,
+  Section,
+  Notification,
+} from "./components";
+import { Wrapper } from "./App.styled";
 
 function App() {
   return (
-    <div className="App">
+    <Wrapper className="App">
       <Feedback />
-    </div>
+    </Wrapper>
   );
 }
 
@@ -17,37 +24,41 @@ class Feedback extends Component {
     bad: 0,
   };
 
-  generateButtons = () => {
-    return Object.keys(this.state).map((element) => (
-      <button
-        key={element}
-        onClick={() => this.onBtnClickCounterIncrements(element)}
-      >
-        {element}
-      </button>
-    ));
+  updateState = (e) => {
+    this.setState(() => ({
+      [e.target.textContent]: this.state[e.target.textContent] + 1,
+    }));
   };
 
-  generateStatistics = () => {
-    return Object.keys(this.state).map((element) => (
-      <li key={element}>{element + ": " + this.state[element]}</li>
-    ));
-  };
+  countTotalFeedback = () => Object.values(this.state).reduce((a, b) => a + b);
 
-  onBtnClickCounterIncrements = (element) => {
-    this.setState(() => ({ [element]: this.state[element] + 1 }));
-  };
+  countPositiveFeedbackPercentage = () =>
+    Math.round((this.state.good / this.countTotalFeedback()) * 100);
 
   render() {
     return (
       <>
-        <h1>Please leave feedback</h1>
-        {this.generateButtons()}
-        <h2>Statistics</h2>
-        <ul>{this.generateStatistics()}</ul>
+        <Section title="Please leave a feedback">
+          <FeedbackOptions
+            options={this.state}
+            onLeaveFeedback={this.updateState}
+            type={"button"}
+          ></FeedbackOptions>
+        </Section>
+        <Section title="Statistics">
+          {this.countTotalFeedback() ? (
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={this.countTotalFeedback()}
+              positivePercentage={this.countPositiveFeedbackPercentage()}
+            />
+          ) : (
+            <Notification message="There is no feedback yet"></Notification>
+          )}
+        </Section>
       </>
     );
   }
 }
-
-// add independent keys generator

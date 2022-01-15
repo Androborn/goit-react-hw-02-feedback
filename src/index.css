@@ -12,7 +12,6 @@ code {
     monospace;
 }
 
-/* common styles */
 h1,
 h2,
 h3,
@@ -44,4 +43,3 @@ a {
 button {
   cursor: pointer;
 }
-/* consider move to global styles */

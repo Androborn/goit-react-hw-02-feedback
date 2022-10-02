@@ -1,9 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const List = styled.ul`
   &::after {
     font-size: 2rem;
-    ${(props) => props.satisfactionrate};
+    ${props => props.satisfactionRate};
   }
 `;
 
